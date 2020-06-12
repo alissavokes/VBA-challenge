@@ -4,16 +4,17 @@ Sub Stonks()
 
     'define variables
     Dim ticker_symbol As String
-    Dim ticker_row As Double
-    Dim last_row As Double
+    Dim ticker_row As Long
+    Dim last_row As Long
     Dim ws As Worksheet
     Dim ann_price_change As Double
-    Dim open_price As Double
+    Dim array_counter As Long
+    Dim open_price() As Double
     Dim close_price As Double
-    Dim percent_change As Double
+    Dim percent_change As Variant
     Dim stock_volume As Variant
-    Dim i As Double
-    
+    Dim i As Long
+
 
     For Each ws In Worksheets
         ws.activate
@@ -24,7 +25,10 @@ Sub Stonks()
         Range("K1").Value = "Percent Change"
         Range("L1").Value = "Total Stock Volume"
     
+        'set ticker row and array counter
         ticker_row = 2
+        array_counter = 0
+        ReDim open_price(0 to array_counter)
 
         'Determine the Last Row
         last_row = Cells(Rows.Count, 1).End(xlUp).Row
@@ -38,12 +42,10 @@ Sub Stonks()
             If Cells(i + 1, 1).Value <> ticker_symbol Then
                 Cells(ticker_row, 9).Value = ticker_symbol
 
-                'calculate open price for current stock
-                open_price = Cells(i - 261, 3).Value
                 'calculate close price for current stock
                 close_price = Cells(i, 6).Value
                 'determine annual price change
-                ann_price_change = close_price - open_price
+                ann_price_change = close_price - open_price(0)
                 'print price change to corresponding ticker symbol
                 Cells(ticker_row, 10).Value = ann_price_change
 
@@ -54,7 +56,12 @@ Sub Stonks()
                         Cells(ticker_row, 10).Interior.ColorIndex = 4
                     End If
                 'determine percent change
-                percent_change = ann_price_change / open_price
+                    If open_price(0) <> 0 then
+                        percent_change = CDec(ann_price_change / open_price(0))
+                    Else
+                        percent_change = 0
+                    End If
+
                 'print percent change to corresponding ticker symbol
                 Cells(ticker_row, 11).Value = Format(percent_change, "Percent")
                 
@@ -66,11 +73,22 @@ Sub Stonks()
                 'make sure new ticker symbol prints in next row
                 ticker_row = ticker_row + 1
 
-                'reset stock volume counter for next stock
+                'reset stock volume/array counter for next stock
                 stock_volume = 0
+                array_counter = 0
+                ReDim open_price(0 to array_counter)
+                
+
             Else
                 'counting volume for current stock
                 stock_volume = CDec(stock_volume + Cells(i, 7).Value)
+
+                If array_counter > 0 Then   
+                    ReDim Preserve open_price(0 to array_counter)
+                End If
+                
+                open_price(array_counter) = Cells(i, 3).Value
+                array_counter = array_counter + 1
                 
             End If
             
