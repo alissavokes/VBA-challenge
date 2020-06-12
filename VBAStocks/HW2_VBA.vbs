@@ -15,7 +15,7 @@ Sub Stonks()
     Dim open_price As Double
     Dim close_price As Double
     Dim percent_change as Double
-    Dim stock_volume as long
+    Dim stock_volume as Variant
     Dim i As Double
     ticker_row = 2
     
@@ -55,7 +55,7 @@ Sub Stonks()
             stock_volume = 0
         Else
             'counting volume for current stock
-            stock_volume = stock_volume + Cells(i, 7).Value
+            stock_volume = CDec(stock_volume + Cells(i, 7).Value)
             
         End If
         
