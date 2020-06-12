@@ -38,6 +38,12 @@ Sub Stonks()
             'print price change to corresponding ticker symbol
             Cells(ticker_row, 10).Value = ann_price_change
 
+                'conditional formatting: +change = green, -change = red
+                If ann_price_change < 0 Then
+                    Cells(ticker_row, 10).Interior.ColorIndex = 3
+                Else
+                    Cells(ticker_row, 10).Interior.ColorIndex = 4
+                End If
             'determine percent change
             percent_change = ann_price_change / open_price
             'print percent change to corresponding ticker symbol
