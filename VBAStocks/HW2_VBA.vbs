@@ -15,6 +15,10 @@ Sub Stonks()
     Dim stock_volume As Variant
     Dim i As Long
 
+    Dim max_percent as Variant
+    Dim min_percent as Variant
+    Dim match_max as String
+    Dim match_min as String
 
     For Each ws In Worksheets
         ws.activate
@@ -24,6 +28,13 @@ Sub Stonks()
         Range("J1").Value = "Yearly Change"
         Range("K1").Value = "Percent Change"
         Range("L1").Value = "Total Stock Volume"
+
+        'challenge columns
+        Range("O2").Value = "Greatest % Increase"
+        Range("O3").Value = "Greatest % Decrease"
+        Range("O4").Value = "Greatest Total Volume"
+        Range("P1").Value = "Ticker"
+        Range("Q1").Value = "Value"
     
         'set ticker row and array counter
         ticker_row = 2
@@ -64,8 +75,8 @@ Sub Stonks()
 
                 'print percent change to corresponding ticker symbol
                 Cells(ticker_row, 11).Value = Format(percent_change, "Percent")
-                
-                'add last sotck volume to counter
+
+                'add last stock volume to counter
                 stock_volume = stock_volume + Cells(i, 7).Value
                 'print stock volume to corresponding ticker symbol
                 Cells(ticker_row, 12).Value = stock_volume
@@ -83,6 +94,7 @@ Sub Stonks()
                 'counting volume for current stock
                 stock_volume = CDec(stock_volume + Cells(i, 7).Value)
 
+                'updating size of array
                 If array_counter > 0 Then   
                     ReDim Preserve open_price(0 to array_counter)
                 End If
@@ -93,6 +105,18 @@ Sub Stonks()
             End If
             
         Next i
+
+
+        'challenge: greatest % changes
+        max_percent = WorksheetFunction.Max(ws.Range("K:K"))
+        ws.Range("Q2").Value = Format(max_percent, "Percent")
+        'match_max = WorksheetFunction.Match(max_percent, ws.Range("I:I"), 0)
+        'ws.Range("P2").Value = ws.Cells(match_max + 1, 1)
+
+        min_percent = WorksheetFunction.Min(ws.Range("K:K"))
+        ws.Range("Q3").Value = Format(min_percent, "Percent")
+        'match_min = WorksheetFunction.Match(min_percent, ws.Range("I:I"), 0)
+        'ws.Range("P2").Value = ws.Cells(match_min + 1, 1)
 
     Next ws
 
