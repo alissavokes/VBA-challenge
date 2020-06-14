@@ -17,8 +17,10 @@ Sub Stonks()
 
     Dim max_percent as Variant
     Dim min_percent as Variant
-    Dim match_max as String
-    Dim match_min as String
+    Dim max_volume as Variant
+    Dim match_max as Long
+    Dim match_min as Long
+    Dim match_volume as Long
 
     For Each ws In Worksheets
         ws.activate
@@ -108,15 +110,21 @@ Sub Stonks()
 
 
         'challenge: greatest % changes
+        
         max_percent = WorksheetFunction.Max(ws.Range("K:K"))
         ws.Range("Q2").Value = Format(max_percent, "Percent")
-        'match_max = WorksheetFunction.Match(max_percent, ws.Range("I:I"), 0)
-        'ws.Range("P2").Value = ws.Cells(match_max + 1, 1)
-
+        match_max = WorksheetFunction.Match(max_percent, ws.Range("K:K"), 0)
+        ws.Range("P2").Value = ws.Cells(match_max, 9)
+  
         min_percent = WorksheetFunction.Min(ws.Range("K:K"))
         ws.Range("Q3").Value = Format(min_percent, "Percent")
-        'match_min = WorksheetFunction.Match(min_percent, ws.Range("I:I"), 0)
-        'ws.Range("P2").Value = ws.Cells(match_min + 1, 1)
+        match_min = WorksheetFunction.Match(min_percent, ws.Range("K:K"), 0)
+        ws.Range("P3").Value = ws.Cells(match_min, 9)
+        
+        max_volume = WorksheetFunction.Max(ws.Range("L:L"))
+        ws.Range("Q4").Value = max_volume
+        match_volume = WorksheetFunction.Match(max_volume, ws.Range("L:L"), 0)
+        ws.Range("P4").Value = ws.Cells(match_volume, 9)
 
     Next ws
 
