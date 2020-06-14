@@ -15,6 +15,7 @@ Sub Stonks()
     Dim stock_volume As Variant
     Dim i As Long
 
+    'challenge variables
     Dim max_percent as Variant
     Dim min_percent as Variant
     Dim max_volume as Variant
