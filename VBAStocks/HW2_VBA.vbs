@@ -1,5 +1,3 @@
-Option Explicit
-
 Sub Stonks()
 
     'define variables
